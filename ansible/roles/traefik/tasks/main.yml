@@ -1,0 +1,31 @@
+- name: Lancer le conteneur Traefik
+  community.docker.docker_container:
+    name: "{{ traefik_container_name }}"
+    image: "{{ traefik_image }}"
+    restart_policy: unless-stopped
+    command:
+      # Traefik découvre les services grâce aux labels Docker
+      - --providers.docker=true
+      # Un conteneur n'est exposé que s'il le demande explicitement
+      - --providers.docker.exposedbydefault=false
+      - --providers.docker.network={{ platform_network_name }}
+      # Point d'entrée HTTP
+      - --entrypoints.web.address=:80
+      - --api.dashboard=true
+      - --log.level=INFO
+      - --accesslog=true
+    ports:
+      - "80:80"
+    volumes:
+      # Lecture seule : Traefik observe Docker sans pouvoir le modifier
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - name: "{{ platform_network_name }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.dashboard.rule: "Host(`{{ traefik_hostname }}`)"
+      traefik.http.routers.dashboard.entrypoints: "web"
+      traefik.http.routers.dashboard.service: "api@internal"
+      project: "novaforge"
+    state: started
+    

@@ -1,0 +1,4 @@
+# Domaine local de la plateforme (.test est réservé, sans conflit avec macOS)
+platform_domain: novaforge.test
+# Réseau Docker commun à tous les services
+platform_network_name: novaforge
