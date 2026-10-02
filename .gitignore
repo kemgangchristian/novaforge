@@ -5,3 +5,6 @@
 .ansible/
 # Fichiers macOS
 .DS_Store
+# certificats
+# Certificats et autorité mkcert
+.certs/

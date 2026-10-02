@@ -3,6 +3,7 @@ python     = "3.12"
 colima     = "0.8"
 lima       = "1"
 docker-cli = "28"
+mkcert     = "1.4"
 
 [env]
 _.python.venv = { path = ".venv", create = true }
@@ -10,3 +11,9 @@ DOCKER_HOST   = "unix://{{env.HOME}}/.colima/novaforge/docker.sock"
 DOCKER_CONFIG = "{{config_root}}/.docker"
 ANSIBLE_HOME  = "{{config_root}}/.ansible"
 ANSIBLE_CONFIG = "{{config_root}}/ansible/ansible.cfg"
+# Racine du projet, utilisée par Ansible
+NOVAFORGE_HOME = "{{config_root}}"
+# L'autorité de certification mkcert est stockée dans le projet
+CAROOT         = "{{config_root}}/.certs/ca"
+# mkcert n'installe l'autorité que dans le trousseau macOS (ni Java, ni Firefox)
+TRUST_STORES = "system"
