@@ -1,0 +1,10 @@
+- name: Créer le réseau Docker partagé de la plateforme
+  community.docker.docker_network:
+    name: "{{ platform_network_name }}"
+    driver: bridge
+    ipam_config:
+      - subnet: "{{ platform_network_subnet }}"
+    labels:
+      project: novaforge
+    state: present
+    

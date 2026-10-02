@@ -1,0 +1,7 @@
+- name: Plateforme NovaForge
+  hosts: workstation
+  gather_facts: false
+
+  roles:
+    - platform_network
+    

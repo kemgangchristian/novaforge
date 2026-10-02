@@ -1,0 +1,5 @@
+# Nom du réseau partagé par tous les services NovaForge
+platform_network_name: novaforge
+# Plage d'adresses fixe, choisie pour ne pas entrer en conflit
+# avec les réseaux Docker par défaut ni avec la plupart des VPN
+platform_network_subnet: 172.30.0.0/24
