@@ -5,7 +5,8 @@ lima       = "1"
 docker-cli = "28"
 
 [env]
+_.python.venv = { path = ".venv", create = true }
 DOCKER_HOST   = "unix://{{env.HOME}}/.colima/novaforge/docker.sock"
 DOCKER_CONFIG = "{{config_root}}/.docker"
 ANSIBLE_HOME  = "{{config_root}}/.ansible"
-_.python.venv = { path = ".venv", create = true }
+ANSIBLE_CONFIG = "{{config_root}}/ansible/ansible.cfg"
