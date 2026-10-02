@@ -1,0 +1,4 @@
+# Config locale Docker
+.docker/
+# Fichiers macOS
+.DS_Store

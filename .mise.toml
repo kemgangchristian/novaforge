@@ -1,0 +1,10 @@
+[tools]
+colima     = "0.8"
+lima       = "1"
+docker-cli = "28"
+
+[env]
+# Docker parle uniquement à la VM du projet
+DOCKER_HOST   = "unix://{{env.HOME}}/.colima/novaforge/docker.sock"
+# La config Docker reste dans le projet (ton ~/.docker n'est pas modifié)
+DOCKER_CONFIG = "{{config_root}}/.docker"
