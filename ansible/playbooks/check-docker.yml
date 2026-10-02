@@ -1,0 +1,16 @@
+- name: Vérifier l'accès au Docker de la VM NovaForge
+  hosts: workstation
+  gather_facts: false
+
+  tasks:
+    - name: Lire les informations du moteur Docker
+      community.docker.docker_host_info:
+      register: docker_info
+
+    - name: Afficher un résumé
+      ansible.builtin.debug:
+        msg: >-
+          Docker {{ docker_info.host_info.ServerVersion }}
+          sur {{ docker_info.host_info.Name }}
+          ({{ docker_info.host_info.NCPU }} CPU)
+          
