@@ -7,3 +7,5 @@
 .DS_Store
 # Certificats et autorité mkcert
 .certs/
+# Données générées par les services
+.data/

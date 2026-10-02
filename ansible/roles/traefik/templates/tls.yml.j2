@@ -1,0 +1,12 @@
+# Généré par Ansible : ne pas modifier à la main
+tls:
+  stores:
+    default:
+      defaultCertificate:
+        certFile: /certs/{{ platform_tls_cert }}
+        keyFile: /certs/{{ platform_tls_key }}
+  options:
+    default:
+      # Refuse les anciennes versions de TLS, jugées non sûres
+      minVersion: VersionTLS12
+      

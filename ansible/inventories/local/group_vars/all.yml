@@ -2,3 +2,13 @@
 platform_domain: novaforge.test
 # Réseau Docker commun à tous les services
 platform_network_name: novaforge
+
+# Chemins du projet (NOVAFORGE_HOME est fourni par mise)
+platform_home: "{{ lookup('env', 'NOVAFORGE_HOME') }}"
+platform_certs_dir: "{{ platform_home }}/.certs"
+# Données générées par les services (jamais dans Git)
+platform_data_dir: "{{ platform_home }}/.data"
+
+# Certificat wildcard créé par mkcert
+platform_tls_cert: novaforge.test.pem
+platform_tls_key: novaforge.test-key.pem

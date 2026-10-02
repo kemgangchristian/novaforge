@@ -1,30 +1,51 @@
+- name: Créer le dossier de configuration dynamique de Traefik
+  ansible.builtin.file:
+    path: "{{ platform_data_dir }}/traefik/dynamic"
+    state: directory
+    mode: "0755"
+
+- name: Générer la configuration TLS
+  ansible.builtin.template:
+    src: tls.yml.j2
+    dest: "{{ platform_data_dir }}/traefik/dynamic/tls.yml"
+    mode: "0644"
+
 - name: Lancer le conteneur Traefik
   community.docker.docker_container:
     name: "{{ traefik_container_name }}"
     image: "{{ traefik_image }}"
     restart_policy: unless-stopped
     command:
-      # Traefik découvre les services grâce aux labels Docker
       - --providers.docker=true
-      # Un conteneur n'est exposé que s'il le demande explicitement
       - --providers.docker.exposedbydefault=false
       - --providers.docker.network={{ platform_network_name }}
-      # Point d'entrée HTTP
+      # Fichiers de configuration dynamique (TLS)
+      - --providers.file.directory=/etc/traefik/dynamic
+      - --providers.file.watch=true
+      # HTTP : redirige tout vers HTTPS
       - --entrypoints.web.address=:80
+      - --entrypoints.web.http.redirections.entrypoint.to=websecure
+      - --entrypoints.web.http.redirections.entrypoint.scheme=https
+      # HTTPS : TLS activé par défaut sur ce point d'entrée
+      - --entrypoints.websecure.address=:443
+      - --entrypoints.websecure.http.tls=true
       - --api.dashboard=true
       - --log.level=INFO
       - --accesslog=true
     ports:
       - "80:80"
+      - "443:443"
     volumes:
-      # Lecture seule : Traefik observe Docker sans pouvoir le modifier
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - "{{ platform_certs_dir }}:/certs:ro"
+      - "{{ platform_data_dir }}/traefik/dynamic:/etc/traefik/dynamic:ro"
     networks:
       - name: "{{ platform_network_name }}"
     labels:
       traefik.enable: "true"
       traefik.http.routers.dashboard.rule: "Host(`{{ traefik_hostname }}`)"
-      traefik.http.routers.dashboard.entrypoints: "web"
+      traefik.http.routers.dashboard.entrypoints: "websecure"
+      traefik.http.routers.dashboard.tls: "true"
       traefik.http.routers.dashboard.service: "api@internal"
       project: "novaforge"
     state: started
