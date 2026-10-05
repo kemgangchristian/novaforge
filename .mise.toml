@@ -11,6 +11,7 @@ DOCKER_HOST   = "unix://{{env.HOME}}/.colima/novaforge/docker.sock"
 DOCKER_CONFIG = "{{config_root}}/.docker"
 ANSIBLE_HOME  = "{{config_root}}/.ansible"
 ANSIBLE_CONFIG = "{{config_root}}/ansible/ansible.cfg"
+ANSIBLE_VAULT_PASSWORD_FILE = "{{config_root}}/.vault-pass"
 # Racine du projet, utilisée par Ansible
 NOVAFORGE_HOME = "{{config_root}}"
 # L'autorité de certification mkcert est stockée dans le projet

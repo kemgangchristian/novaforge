@@ -9,3 +9,5 @@
 .certs/
 # Données générées par les services
 .data/
+# Clé du coffre Ansible : ne JAMAIS la versionner
+.vault-pass
