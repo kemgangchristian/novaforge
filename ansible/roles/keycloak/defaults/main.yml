@@ -1,0 +1,10 @@
+keycloak_image: quay.io/keycloak/keycloak:26.4.0
+keycloak_container_name: keycloak
+keycloak_hostname: "keycloak.{{ platform_domain }}"
+
+# Compte administrateur initial (mot de passe dans le coffre)
+keycloak_admin_user: admin
+keycloak_admin_password: "{{ vault_keycloak_admin_password }}"
+
+# Connexion à la base (variables du rôle keycloak_db)
+keycloak_db_url: "jdbc:postgresql://{{ keycloak_db_container_name }}:5432/{{ keycloak_db_name }}"

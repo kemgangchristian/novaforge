@@ -1,0 +1,54 @@
+- name: Lancer Keycloak
+  community.docker.docker_container:
+    name: "{{ keycloak_container_name }}"
+    image: "{{ keycloak_image }}"
+    restart_policy: unless-stopped
+    # Mode production (pas "start-dev")
+    command: ["start"]
+    env:
+      # Base de données
+      KC_DB: "postgres"
+      KC_DB_URL: "{{ keycloak_db_url }}"
+      KC_DB_USERNAME: "{{ keycloak_db_user }}"
+      KC_DB_PASSWORD: "{{ keycloak_db_password }}"
+      # Adresse publique, et TLS géré par Traefik
+      KC_HOSTNAME: "https://{{ keycloak_hostname }}"
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: "xforwarded"
+      # Sondes de santé, et métriques pour Prometheus plus tard
+      KC_HEALTH_ENABLED: "true"
+      KC_METRICS_ENABLED: "true"
+      # Administrateur initial
+      KC_BOOTSTRAP_ADMIN_USERNAME: "{{ keycloak_admin_user }}"
+      KC_BOOTSTRAP_ADMIN_PASSWORD: "{{ keycloak_admin_password }}"
+    networks:
+      - name: "{{ platform_network_name }}"
+    # L'image ne contient pas curl : on interroge la sonde avec bash
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          exec 3<>/dev/tcp/127.0.0.1/9000 &&
+          printf 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\nConnection: close\r\n\r\n' >&3 &&
+          grep -q '"UP"' <&3
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 60s
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.keycloak.rule: "Host(`{{ keycloak_hostname }}`)"
+      traefik.http.routers.keycloak.entrypoints: "websecure"
+      traefik.http.routers.keycloak.tls: "true"
+      traefik.http.services.keycloak.loadbalancer.server.port: "8080"
+      project: "novaforge"
+    state: started
+
+- name: Attendre que Keycloak soit prêt
+  community.docker.docker_container_info:
+    name: "{{ keycloak_container_name }}"
+  register: keycloak_info
+  until: keycloak_info.container.State.Health.Status == "healthy"
+  retries: 30
+  delay: 5
+  

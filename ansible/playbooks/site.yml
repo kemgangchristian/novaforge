@@ -6,5 +6,6 @@
     - platform_network
     - traefik
     - keycloak_db
+    - keycloak
     
     
