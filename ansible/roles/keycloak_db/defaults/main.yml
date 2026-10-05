@@ -1,0 +1,8 @@
+keycloak_db_image: postgres:17-alpine
+keycloak_db_container_name: keycloak-db
+keycloak_db_name: keycloak
+keycloak_db_user: keycloak
+# Le mot de passe vient du coffre chiffré
+keycloak_db_password: "{{ vault_keycloak_db_password }}"
+# Volume Docker nommé : les données survivent à la suppression du conteneur
+keycloak_db_volume: keycloak-db-data
