@@ -8,3 +8,4 @@
     - keycloak_db
     - keycloak
     - whoami
+    - app

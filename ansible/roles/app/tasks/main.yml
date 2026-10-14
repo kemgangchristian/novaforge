@@ -1,0 +1,26 @@
+- name: Construire l'image de l'application
+  community.docker.docker_image:
+    name: "{{ app_image }}"
+    source: build
+    build:
+      path: "{{ app_source_dir }}"
+    # Reconstruit à chaque passage ; le cache Docker évite de tout retélécharger
+    force_source: true
+    state: present
+
+- name: Lancer l'application
+  community.docker.docker_container:
+    name: "{{ app_container_name }}"
+    image: "{{ app_image }}"
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ platform_network_name }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.app.rule: "Host(`{{ app_hostname }}`)"
+      traefik.http.routers.app.entrypoints: "websecure"
+      traefik.http.routers.app.tls: "true"
+      traefik.http.services.app.loadbalancer.server.port: "{{ app_port }}"
+      project: "novaforge"
+    state: started
+    
