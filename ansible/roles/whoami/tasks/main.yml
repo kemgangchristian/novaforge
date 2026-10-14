@@ -1,0 +1,16 @@
+- name: Lancer l'application whoami
+  community.docker.docker_container:
+    name: "{{ whoami_container_name }}"
+    image: "{{ whoami_image }}"
+    restart_policy: unless-stopped
+    networks:
+      - name: "{{ platform_network_name }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.whoami.rule: "Host(`{{ whoami_hostname }}`)"
+      traefik.http.routers.whoami.entrypoints: "websecure"
+      traefik.http.routers.whoami.tls: "true"
+      traefik.http.services.whoami.loadbalancer.server.port: "80"
+      project: "novaforge"
+    state: started
+    

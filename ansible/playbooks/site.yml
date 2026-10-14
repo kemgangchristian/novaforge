@@ -7,5 +7,4 @@
     - traefik
     - keycloak_db
     - keycloak
-    
-    
+    - whoami

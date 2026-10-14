@@ -1,0 +1,3 @@
+whoami_image: traefik/whoami:v1.10
+whoami_container_name: whoami
+whoami_hostname: "whoami.{{ platform_domain }}"
