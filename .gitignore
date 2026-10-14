@@ -11,3 +11,6 @@
 .data/
 # Clé du coffre Ansible : ne JAMAIS la versionner
 .vault-pass
+# Bytecode Python généré par les tests
+__pycache__/
+*.pyc
