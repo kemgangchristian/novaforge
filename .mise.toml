@@ -4,6 +4,7 @@ colima     = "0.8"
 lima       = "1"
 docker-cli = "28"
 mkcert     = "1.4"
+trivy      = "0.75"
 
 [env]
 _.python.venv = { path = ".venv", create = true }

@@ -1,0 +1,14 @@
+scan:
+  scanners:
+    - vuln
+  # Les versions du requirements.txt sont des bornes (>=), pas des versions figées (==)
+  detection-priority: comprehensive
+  skip-dirs:
+    - .venv
+    - .ansible
+    - .git
+    - .data
+    - .certs
+    - .docker
+
+exit-code: 0
