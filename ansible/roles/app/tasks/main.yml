@@ -1,3 +1,9 @@
+- name: Tester l'application
+  ansible.builtin.command:
+    cmd: python -m unittest test_server.py
+    chdir: "{{ app_source_dir }}"
+  changed_when: false
+  
 - name: Construire l'image de l'application
   community.docker.docker_image:
     name: "{{ app_image }}"
