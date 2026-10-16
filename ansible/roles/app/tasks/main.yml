@@ -27,11 +27,12 @@
     tag: local
     push: true
     source: local
-    
+
 - name: Lancer l'application
   community.docker.docker_container:
     name: "{{ app_container_name }}"
-    image: "{{ app_image }}"
+    image: "{{ app_registry_image }}"
+    pull: true
     restart_policy: unless-stopped
     networks:
       - name: "{{ platform_network_name }}"
