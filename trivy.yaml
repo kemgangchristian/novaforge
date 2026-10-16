@@ -9,4 +9,8 @@ scan:
     - .certs
     - .docker
 
-exit-code: 0
+severity:
+  - HIGH
+  - CRITICAL
+
+exit-code: 1
