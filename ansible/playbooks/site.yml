@@ -8,4 +8,5 @@
     - keycloak_db
     - keycloak
     - whoami
+    - registry
     - app

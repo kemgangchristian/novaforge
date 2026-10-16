@@ -3,3 +3,4 @@ app_container_name: app
 app_hostname: "app.{{ platform_domain }}"
 app_port: "8080"
 app_source_dir: "{{ platform_home }}/app"
+app_registry: "localhost:5001"

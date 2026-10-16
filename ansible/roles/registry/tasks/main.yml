@@ -1,0 +1,24 @@
+- name: Lancer le registre d'images local
+  community.docker.docker_container:
+    name: "{{ registry_container_name }}"
+    image: "{{ registry_image }}"
+    restart_policy: unless-stopped
+    ports:
+      - "{{ registry_port }}:5000"
+    volumes:
+      - "{{ registry_volume }}:/var/lib/registry"
+    networks:
+      - name: "{{ platform_network_name }}"
+    labels:
+      project: "novaforge"
+    state: started
+
+- name: Attendre que le registre réponde
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ registry_port }}/v2/"
+    status_code: 200
+  register: registry_health
+  until: registry_health.status == 200
+  retries: 10
+  delay: 2
+  

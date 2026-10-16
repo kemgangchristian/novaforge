@@ -1,0 +1,4 @@
+registry_image: registry:2
+registry_container_name: registry
+registry_port: "5001"
+registry_volume: registry-data
