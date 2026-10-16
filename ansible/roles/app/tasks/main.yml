@@ -8,6 +8,12 @@
     force_source: true
     state: present
 
+- name: Scanner l'image de l'application
+  ansible.builtin.command:
+    cmd: trivy image {{ app_image }}
+    chdir: "{{ platform_home }}"
+  changed_when: false
+
 - name: Lancer l'application
   community.docker.docker_container:
     name: "{{ app_container_name }}"
@@ -23,4 +29,3 @@
       traefik.http.services.app.loadbalancer.server.port: "{{ app_port }}"
       project: "novaforge"
     state: started
-    
