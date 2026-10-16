@@ -5,6 +5,8 @@ lima       = "1"
 docker-cli = "28"
 mkcert     = "1.4"
 trivy      = "0.75"
+k3d        = "5.9"
+kubectl    = "1.35"
 
 [env]
 _.python.venv = { path = ".venv", create = true }
