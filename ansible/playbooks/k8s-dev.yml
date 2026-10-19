@@ -1,0 +1,10 @@
+- name: Déployer l'application sur le cluster dev
+  hosts: workstation
+  gather_facts: false
+
+  tasks:
+    - name: Appliquer les manifestes
+      ansible.builtin.command:
+        cmd: "kubectl --context k3d-dev apply -f {{ platform_home }}/deploy/dev"
+      register: kubectl_apply
+      changed_when: "'created' in kubectl_apply.stdout or 'configured' in kubectl_apply.stdout"
