@@ -1,0 +1,29 @@
+- name: Lancer Jenkins
+  community.docker.docker_container:
+    name: "{{ jenkins_container_name }}"
+    image: "{{ jenkins_image }}"
+    restart_policy: unless-stopped
+    env:
+      JAVA_OPTS: "-Xmx768m"
+    volumes:
+      - "{{ jenkins_volume }}:/var/jenkins_home"
+    networks:
+      - name: "{{ platform_network_name }}"
+    labels:
+      traefik.enable: "true"
+      traefik.http.routers.jenkins.rule: "Host(`{{ jenkins_hostname }}`)"
+      traefik.http.routers.jenkins.entrypoints: "websecure"
+      traefik.http.routers.jenkins.tls: "true"
+      traefik.http.services.jenkins.loadbalancer.server.port: "{{ jenkins_port }}"
+      project: "novaforge"
+    state: started
+
+- name: Attendre que Jenkins réponde
+  ansible.builtin.uri:
+    url: "https://{{ jenkins_hostname }}/login"
+    status_code: 200
+    validate_certs: false
+  register: jenkins_health
+  until: jenkins_health.status == 200
+  retries: 36
+  delay: 5
