@@ -4,3 +4,9 @@ metadata:
   name: staging
 servers: 1
 agents: 0
+registries:
+  config: |
+    mirrors:
+      "localhost:5001":
+        endpoint:
+          - http://registry:5000
