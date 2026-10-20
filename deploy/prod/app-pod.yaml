@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: novaforge-app
+  labels:
+    app: novaforge-app
+spec:
+  containers:
+    - name: app
+      image: localhost:5001/novaforge-app:local
+      ports:
+        - containerPort: 8080
